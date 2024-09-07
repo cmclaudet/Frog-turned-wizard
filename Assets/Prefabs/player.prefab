@@ -131,12 +131,14 @@ MonoBehaviour:
   animator: {fileID: 7262068274707047349}
   explosion: {fileID: 7749291485881980267, guid: 780a01d3583f64e8e8f25f27833a8a9a, type: 3}
   walkSpeed: 70
-  minJumpForce: 4000
-  maxJumpForce: 4000
+  minJumpForce: 3500
+  maxJumpForce: 3500
   minTeleportDistance: 10
   maxTeleportDistance: 30
   teleportationProbability: 0.5
   teleportDirectionShiftProbability: 0.5
+  leftBounds: {fileID: 0}
+  rightBounds: {fileID: 0}
 --- !u!50 &8693566426268998710
 Rigidbody2D:
   serializedVersion: 4

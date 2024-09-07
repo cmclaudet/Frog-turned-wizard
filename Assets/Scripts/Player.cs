@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Exit {
   public class Player : MonoBehaviour {
@@ -20,6 +21,9 @@ namespace Exit {
     [SerializeField] private float teleportationProbability;
     [Range(0, 1)]
     [SerializeField] private float teleportDirectionShiftProbability;
+
+    [SerializeField] private GameObject leftBounds;
+    [SerializeField] private GameObject rightBounds;
     
     private float horizontalInput;
     private float horizontalMovement;
@@ -118,14 +122,27 @@ namespace Exit {
     private void Teleport()
     {
       CharacterController.IsGrounded = false;
-      var teleportDistanceX = Random.Range(minTeleportDistance, maxTeleportDistance);
-      var teleportDistanceY = Random.Range(minTeleportDistance, maxTeleportDistance);
-      var shouldRevertTeleportDirection = Random.Range(0f, 1f) < teleportDirectionShiftProbability;
+      
+      (Vector3 newPosition, bool shouldRevertTeleportDirection) = GetRandomTeleportDirection();
+      
+      while (newPosition.x < leftBounds.transform.position.x || newPosition.x > rightBounds.transform.position.x)
+      {
+        (newPosition, shouldRevertTeleportDirection) = GetRandomTeleportDirection();
+      }
+      
       Explode(shouldRevertTeleportDirection);
-      var horizontalDirection = (shouldRevertTeleportDirection ? -1 : 1) * horizontalInput * teleportDistanceX;
-      transform.position += new Vector3(horizontalDirection, teleportDistanceY, 0);
+      transform.position = newPosition;
       currentJumpState = JumpState.Normal;
       Explode(shouldRevertTeleportDirection);
+    }
+    
+    private (Vector3, bool) GetRandomTeleportDirection()
+    {
+      bool shouldRevertTeleportDirection = Random.Range(0f, 1f) < teleportDirectionShiftProbability;
+      var teleportDistanceX = Random.Range(minTeleportDistance, maxTeleportDistance);
+      var teleportDistanceY = Random.Range(minTeleportDistance, maxTeleportDistance);
+      var horizontalDirection = (shouldRevertTeleportDirection ? -1 : 1) * horizontalInput * teleportDistanceX;
+      return (transform.position + new Vector3(horizontalDirection, teleportDistanceY, 0), shouldRevertTeleportDirection);
     }
 
     private void Explode(bool shouldRevertTeleportDirection)
