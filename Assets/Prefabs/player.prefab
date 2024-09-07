@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1948480486300671313}
@@ -81,7 +81,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 04e0e23143ccd4878b152553d1fba51a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 207f8e669e4de3d4eb126d568d86c025, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -128,8 +128,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterController: {fileID: 4950477439519087885}
   walkSpeed: 30
-  minJumpForce: 500
-  maxJumpForce: 500
+  minJumpForce: 1000
+  maxJumpForce: 1000
   minTeleportDistance: 2
   maxTeleportDistance: 4
   teleportDelaySec: 0
@@ -149,7 +149,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 2
+  m_GravityScale: 2.5
   m_Material: {fileID: 6200000, guid: 82d5b4b25fa9541398bb5b3b94e1903a, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -197,7 +197,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.8, y: 6.34}
+    oldSize: {x: 15, y: 15}
     newSize: {x: 5.8, y: 6.34}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -283,6 +283,7 @@ GameObject:
   - component: {fileID: 2275876268353628053}
   - component: {fileID: 2799467794936698560}
   - component: {fileID: 2752847034363924886}
+  - component: {fileID: 7194972668140940995}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -364,6 +365,18 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7995281530829597871}
   m_Enabled: 1
+--- !u!114 &7194972668140940995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7995281530829597871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c1018740087fc745a2b073e9c69f245, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8116475434710674464
 GameObject:
   m_ObjectHideFlags: 0
