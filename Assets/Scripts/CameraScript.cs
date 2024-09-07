@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
+    private float startingXPos;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        startingXPos = transform.position.x;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(0, transform.position.y, -4);
+        transform.position = new Vector3(startingXPos, transform.position.y, -4);
     }
 }
