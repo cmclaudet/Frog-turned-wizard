@@ -79,8 +79,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: -2053015409
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 207f8e669e4de3d4eb126d568d86c025, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -131,11 +131,11 @@ MonoBehaviour:
   animator: {fileID: 7262068274707047349}
   explosion: {fileID: 7749291485881980267, guid: 780a01d3583f64e8e8f25f27833a8a9a, type: 3}
   walkSpeed: 70
-  minJumpForce: 3500
-  maxJumpForce: 3500
+  minJumpForce: 3000
+  maxJumpForce: 3000
   minTeleportDistance: 10
   maxTeleportDistance: 35
-  teleportationProbability: 0.8
+  teleportationProbability: 0.5
   teleportDirectionShiftProbability: 0.5
   leftBounds: {fileID: 0}
   rightBounds: {fileID: 0}
