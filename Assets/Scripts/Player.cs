@@ -121,21 +121,24 @@ namespace Exit {
       var teleportDistanceX = Random.Range(minTeleportDistance, maxTeleportDistance);
       var teleportDistanceY = Random.Range(minTeleportDistance, maxTeleportDistance);
       var shouldRevertTeleportDirection = Random.Range(0f, 1f) < teleportDirectionShiftProbability;
+      Explode(shouldRevertTeleportDirection);
+      var horizontalDirection = (shouldRevertTeleportDirection ? -1 : 1) * horizontalInput * teleportDistanceX;
+      transform.position += new Vector3(horizontalDirection, teleportDistanceY, 0);
+      currentJumpState = JumpState.Normal;
+      Explode(shouldRevertTeleportDirection);
+    }
+
+    private void Explode(bool shouldRevertTeleportDirection)
+    {
       var explosionObj = Instantiate(explosion);
       explosionObj.transform.position = transform.position;
       if (shouldRevertTeleportDirection)
       {
-        explosionObj.GetComponent<SpriteRenderer>().color = Color.grey;
+        explosionObj.GetComponent<Animator>().Play("ExplodeSpecial");
       }
-      var horizontalDirection = (shouldRevertTeleportDirection ? -1 : 1) * horizontalInput * teleportDistanceX;
-      transform.position += new Vector3(horizontalDirection, teleportDistanceY, 0);
-      currentJumpState = JumpState.Normal;
-      
-      var explosionObj2 = Instantiate(explosion);
-      explosionObj2.transform.position = transform.position;
-      if (shouldRevertTeleportDirection)
+      else
       {
-        explosionObj2.GetComponent<SpriteRenderer>().color = Color.grey;
+        explosionObj.GetComponent<Animator>().Play("Explode");
       }
     }
   }
