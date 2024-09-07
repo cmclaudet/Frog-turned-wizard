@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Exit {
   public class Player : MonoBehaviour {
     [SerializeField] private GameplayCharacterController CharacterController;
+    [SerializeField] private Animator animator;
     [SerializeField] private float walkSpeed;
     
     [SerializeField] private float minJumpForce;
@@ -20,6 +23,7 @@ namespace Exit {
     private float horizontalMovement;
     private bool isWalking;
     private float nextJumpForce;
+    private float lastYPosition;
     
     private Input input;
     private JumpState currentJumpState;
@@ -33,6 +37,7 @@ namespace Exit {
     private void OnLanded()
     {
       currentJumpState = JumpState.None;
+      animator.SetBool(AnimationConstants.IsJumping, false);
     }
 
     void Update()
@@ -41,7 +46,7 @@ namespace Exit {
         ? 0
         : horizontalInput * walkSpeed;
       input.Update();
-      // UpdateWalkAnimationState();
+      UpdateWalkAnimationState();
     }
 
     public void TryJump()
@@ -75,17 +80,32 @@ namespace Exit {
       horizontalInput = input;
     }
     
-    // private void UpdateWalkAnimationState() {
-    //   if (Mathf.Abs(horizontalMovement) > 0 && isWalking == false) {
-    //     isWalking = true;
-    //     animator.SetBool(Constants.Animation.Walking, true);
-    //   } else if (Math.Abs(horizontalMovement) < 0.01f && isWalking) {
-    //     isWalking = false;
-    //     animator.SetBool(Constants.Animation.Walking, false);
-    //   }
-    // }
+    private void UpdateWalkAnimationState() {
+      if (CharacterController.IsGrounded == false)
+      {
+        animator.SetBool(AnimationConstants.IsJumping, true);
+        animator.SetBool(AnimationConstants.IsJumpingDown, lastYPosition > transform.position.y);
+      }
+      else
+      {
+        animator.SetBool(AnimationConstants.IsJumping, false);
+        animator.SetBool(AnimationConstants.IsJumpingDown, false);
+        
+        if (Mathf.Abs(horizontalMovement) > 0 && isWalking == false)
+        {
+          isWalking = true;
+          animator.SetBool(AnimationConstants.IsWalking, true);
+        }
+        else if (Math.Abs(horizontalMovement) < 0.01f && isWalking)
+        {
+          isWalking = false;
+          animator.SetBool(AnimationConstants.IsWalking, false);
+        }
+      }
+    }
 
     void FixedUpdate() {
+      lastYPosition = transform.position.y;
       CharacterController.Move(horizontalMovement * Time.fixedDeltaTime, false, currentJumpState == JumpState.Normal, nextJumpForce);
       if (currentJumpState == JumpState.Teleport)
       {
