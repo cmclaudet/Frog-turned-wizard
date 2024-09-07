@@ -1,5 +1,12 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+
+public enum JumpState {
+	None,
+	Normal,
+	Teleport
+}
 
 public class GameplayCharacterController : MonoBehaviour
 {
@@ -18,6 +25,12 @@ public class GameplayCharacterController : MonoBehaviour
 	private Rigidbody2D m_Rigidbody2D;
 	private bool m_FacingRight = true;  // For determining which way the player is currently facing.
 	private Vector3 m_Velocity = Vector3.zero;
+
+	public bool IsGrounded
+	{
+		get => m_Grounded;
+		set => m_Grounded = value;
+	}
 
 	[Header("Events")]
 	[Space]

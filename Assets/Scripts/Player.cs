@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Exit {
@@ -7,14 +8,22 @@ namespace Exit {
     
     [SerializeField] private float minJumpForce;
     [SerializeField] private float maxJumpForce;
+
+    [SerializeField] private float minTeleportDistance;
+    [SerializeField] private float maxTeleportDistance;
+    
+    [SerializeField] private float teleportDelaySec = 1;
+    
+    [Range(0, 1)]
+    [SerializeField] private float teleportationProbability;
     
     private float horizontalInput;
     private float horizontalMovement;
-    private bool isJumping;
     private bool isWalking;
     private float nextJumpForce;
     
     private Input input;
+    private JumpState currentJumpState;
 
     private void Awake()
     {
@@ -22,14 +31,23 @@ namespace Exit {
     }
 
     void Update() {
-      horizontalMovement = horizontalInput * walkSpeed;
+      horizontalMovement = currentJumpState == JumpState.Teleport ? 0 : horizontalInput * walkSpeed;
       input.Update();
       // UpdateWalkAnimationState();
     }
 
-    public void TryJump() {
-      isJumping = true;
-      SetNextJumpForce();
+    public void TryJump()
+    {
+      if (CharacterController.IsGrounded == false)
+      {
+        return;
+      }
+      var willTeleport = Random.Range(0f, 1f) < teleportationProbability;
+      currentJumpState = willTeleport ? JumpState.Teleport : JumpState.Normal;
+      if (currentJumpState == JumpState.Normal)
+      {
+        SetNextJumpForce();
+      }
     }
 
     private void SetNextJumpForce()
@@ -52,8 +70,21 @@ namespace Exit {
     // }
 
     void FixedUpdate() {
-      CharacterController.Move(horizontalMovement * Time.fixedDeltaTime, false, isJumping, nextJumpForce);
-      isJumping = false;
+      CharacterController.Move(horizontalMovement * Time.fixedDeltaTime, false, currentJumpState == JumpState.Normal, nextJumpForce);
+      if (currentJumpState == JumpState.Teleport)
+      {
+        StartCoroutine(StartTeleport());
+      }
+    }
+    
+    private IEnumerator StartTeleport()
+    {
+      CharacterController.IsGrounded = false;
+      yield return new WaitForSeconds(teleportDelaySec);
+
+      var teleportDistance = Random.Range(minTeleportDistance, maxTeleportDistance);
+      transform.position += new Vector3(horizontalInput * teleportDistance, teleportDistance, 0);
+      currentJumpState = JumpState.None;
     }
   }
 }
