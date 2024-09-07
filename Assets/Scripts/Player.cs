@@ -28,6 +28,12 @@ namespace Exit {
     private void Awake()
     {
       input = new Input(this);
+      CharacterController.OnLandEvent.AddListener(OnLanded);
+    }
+
+    private void OnLanded()
+    {
+      currentJumpState = JumpState.None;
     }
 
     void Update() {
@@ -46,13 +52,11 @@ namespace Exit {
       currentJumpState = willTeleport ? JumpState.Teleport : JumpState.Normal;
       if (currentJumpState == JumpState.Normal)
       {
-        SetNextJumpForce();
+        nextJumpForce = Random.Range(minJumpForce, maxJumpForce);
+      } else if (currentJumpState == JumpState.Teleport)
+      {
+        nextJumpForce = 0;
       }
-    }
-
-    private void SetNextJumpForce()
-    {
-      nextJumpForce = Random.Range(minJumpForce, maxJumpForce);
     }
 
     public void SetHorizontalInput(float input) {
@@ -84,7 +88,7 @@ namespace Exit {
 
       var teleportDistance = Random.Range(minTeleportDistance, maxTeleportDistance);
       transform.position += new Vector3(horizontalInput * teleportDistance, teleportDistance, 0);
-      currentJumpState = JumpState.None;
+      currentJumpState = JumpState.Normal;
     }
   }
 }
