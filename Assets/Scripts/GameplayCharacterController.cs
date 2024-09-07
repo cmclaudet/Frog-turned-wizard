@@ -5,6 +5,7 @@ using UnityEngine.Events;
 public enum JumpState {
 	None,
 	Normal,
+	PendingTeleport,
 	Teleport
 }
 

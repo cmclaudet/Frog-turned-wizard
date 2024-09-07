@@ -3,6 +3,7 @@ namespace Exit {
         private bool canMove = true;
         private readonly Player player;
         private bool verticalAxisInUse;
+        public bool isPendingTeleport;
 
         public Input(Player player) {
             this.player = player;
@@ -18,6 +19,9 @@ namespace Exit {
 
             if (UnityEngine.Input.GetButtonDown("Jump")) {
                 player.TryJump();
+            } else if (UnityEngine.Input.GetButtonUp ("Jump") && isPendingTeleport) {
+                isPendingTeleport = false;
+                player.TryTeleport();
             }
         }
 

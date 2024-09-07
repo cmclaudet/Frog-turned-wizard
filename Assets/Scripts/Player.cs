@@ -36,8 +36,11 @@ namespace Exit {
       currentJumpState = JumpState.None;
     }
 
-    void Update() {
-      horizontalMovement = currentJumpState == JumpState.Teleport ? 0 : horizontalInput * walkSpeed;
+    void Update()
+    {
+      horizontalMovement = (currentJumpState == JumpState.Teleport || currentJumpState == JumpState.PendingTeleport)
+        ? 0
+        : horizontalInput * walkSpeed;
       input.Update();
       // UpdateWalkAnimationState();
     }
@@ -49,16 +52,26 @@ namespace Exit {
         return;
       }
       var willTeleport = Random.Range(0f, 1f) < teleportationProbability;
-      currentJumpState = willTeleport ? JumpState.Teleport : JumpState.Normal;
+      currentJumpState = willTeleport ? JumpState.PendingTeleport : JumpState.Normal;
       if (currentJumpState == JumpState.Normal)
       {
         nextJumpForce = Random.Range(minJumpForce, maxJumpForce);
-      } else if (currentJumpState == JumpState.Teleport)
+      } 
+      else
       {
         nextJumpForce = 0;
+        if (currentJumpState == JumpState.PendingTeleport)
+        {
+          input.isPendingTeleport = true;
+        }
       }
     }
 
+    public void TryTeleport()
+    {
+      currentJumpState = JumpState.Teleport;
+    }
+    
     public void SetHorizontalInput(float input) {
       horizontalInput = input;
     }
