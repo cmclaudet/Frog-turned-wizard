@@ -9,6 +9,9 @@ namespace Exit {
     [SerializeField] private GameplayCharacterController CharacterController;
     [SerializeField] private Animator animator;
     [SerializeField] private GameObject explosion;
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip bounceSound;
+    [SerializeField] private AudioClip teleportSound;
     [SerializeField] private float walkSpeed;
     
     [SerializeField] private float minJumpForce;
@@ -74,6 +77,8 @@ namespace Exit {
       currentJumpState = willTeleport ? JumpState.PendingTeleport : JumpState.Normal;
       if (currentJumpState == JumpState.Normal)
       {
+        audioSource.clip = bounceSound;
+        audioSource.Play();
         nextJumpForce = Random.Range(minJumpForce, maxJumpForce);
       } 
       else
@@ -130,6 +135,8 @@ namespace Exit {
     
     private void Teleport()
     {
+      audioSource.clip = teleportSound;
+      audioSource.Play();
       CharacterController.IsGrounded = false;
       
       (Vector3 newPosition, bool shouldRevertTeleportDirection) = GetRandomTeleportDirection();
