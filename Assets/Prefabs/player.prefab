@@ -134,8 +134,8 @@ MonoBehaviour:
   minJumpForce: 3500
   maxJumpForce: 3500
   minTeleportDistance: 10
-  maxTeleportDistance: 30
-  teleportationProbability: 0.5
+  maxTeleportDistance: 35
+  teleportationProbability: 0.8
   teleportDirectionShiftProbability: 0.5
   leftBounds: {fileID: 0}
   rightBounds: {fileID: 0}
