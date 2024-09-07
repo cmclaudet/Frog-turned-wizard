@@ -33,6 +33,11 @@ namespace Exit {
     
     private Input input;
     private JumpState currentJumpState;
+    
+    public void DisableInput()
+    {
+      input.ToggleCanMove(false);
+    }
 
     private void Awake()
     {

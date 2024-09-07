@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraScript : MonoBehaviour
 {
     private float startingXPos;
+    private bool isFrozen;
 
     // Start is called before the first frame update
     void Start()
@@ -15,6 +16,14 @@ public class CameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(startingXPos, transform.position.y, -4);
+        if (isFrozen == false)
+        {
+            transform.position = new Vector3(startingXPos, transform.position.y, -4);
+        }
+    }
+
+    public void Freeze()
+    {
+        isFrozen = true;
     }
 }
