@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8693566426268998710}
   - component: {fileID: 2766354278448391430}
   - component: {fileID: 8051261535190058328}
+  - component: {fileID: 7262068274707047349}
   m_Layer: 3
   m_Name: player
   m_TagString: Untagged
@@ -127,6 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   CharacterController: {fileID: 4950477439519087885}
+  animator: {fileID: 7262068274707047349}
   walkSpeed: 70
   minJumpForce: 2000
   maxJumpForce: 2000
@@ -241,6 +243,27 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -1.08}
   serializedVersion: 2
   m_Radius: 1.83
+--- !u!95 &7262068274707047349
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1749256045441315625}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d326bc2d1c9b94f6b84f14c90281a1ea, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3021711091702960907
 GameObject:
   m_ObjectHideFlags: 0
