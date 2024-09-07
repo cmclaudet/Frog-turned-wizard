@@ -129,6 +129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CharacterController: {fileID: 4950477439519087885}
   animator: {fileID: 7262068274707047349}
+  explosion: {fileID: 7749291485881980267, guid: 780a01d3583f64e8e8f25f27833a8a9a, type: 3}
   walkSpeed: 70
   minJumpForce: 2000
   maxJumpForce: 2000
