@@ -459,7 +459,7 @@ MonoBehaviour:
   CharacterController: {fileID: 1137985741}
   walkSpeed: 30
   minJumpForce: 500
-  maxJumpForce: 1000
+  maxJumpForce: 500
 --- !u!50 &1137985743
 Rigidbody2D:
   serializedVersion: 4
