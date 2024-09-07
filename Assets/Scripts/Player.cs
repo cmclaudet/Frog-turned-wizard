@@ -1,11 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Exit {
   public class Player : MonoBehaviour {
     [SerializeField] private GameplayCharacterController CharacterController;
     [SerializeField] private Animator animator;
+    [SerializeField] private GameObject explosion;
     [SerializeField] private float walkSpeed;
     
     [SerializeField] private float minJumpForce;
@@ -119,9 +121,25 @@ namespace Exit {
       var teleportDistanceX = Random.Range(minTeleportDistance, maxTeleportDistance);
       var teleportDistanceY = Random.Range(minTeleportDistance, maxTeleportDistance);
       var shouldRevertTeleportDirection = Random.Range(0f, 1f) < teleportDirectionShiftProbability;
+      Explode(shouldRevertTeleportDirection);
       var horizontalDirection = (shouldRevertTeleportDirection ? -1 : 1) * horizontalInput * teleportDistanceX;
       transform.position += new Vector3(horizontalDirection, teleportDistanceY, 0);
       currentJumpState = JumpState.Normal;
+      Explode(shouldRevertTeleportDirection);
+    }
+
+    private void Explode(bool shouldRevertTeleportDirection)
+    {
+      var explosionObj = Instantiate(explosion);
+      explosionObj.transform.position = transform.position;
+      if (shouldRevertTeleportDirection)
+      {
+        explosionObj.GetComponent<Animator>().Play("ExplodeSpecial");
+      }
+      else
+      {
+        explosionObj.GetComponent<Animator>().Play("Explode");
+      }
     }
   }
 }
