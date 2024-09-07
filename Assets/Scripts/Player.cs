@@ -21,9 +21,13 @@ namespace Exit {
     [SerializeField] private float teleportationProbability;
     [Range(0, 1)]
     [SerializeField] private float teleportDirectionShiftProbability;
+    [Range(0, 1)]
+    [SerializeField] private float teleportDownwardsDirectionProbability;
 
     [SerializeField] private GameObject leftBounds;
     [SerializeField] private GameObject rightBounds;
+    [SerializeField] private GameObject bottomBounds;
+    [SerializeField] private BoxCollider2D[] topBounds;
     
     private float horizontalInput;
     private float horizontalMovement;
@@ -130,7 +134,10 @@ namespace Exit {
       
       (Vector3 newPosition, bool shouldRevertTeleportDirection) = GetRandomTeleportDirection();
       
-      while (newPosition.x < leftBounds.transform.position.x || newPosition.x > rightBounds.transform.position.x)
+      while (newPosition.x < leftBounds.transform.position.x ||
+             newPosition.x > rightBounds.transform.position.x ||
+             newPosition.y < bottomBounds.transform.position.y ||
+             IsInTopColliders(newPosition))
       {
         (newPosition, shouldRevertTeleportDirection) = GetRandomTeleportDirection();
       }
@@ -140,14 +147,29 @@ namespace Exit {
       currentJumpState = JumpState.Normal;
       Explode(shouldRevertTeleportDirection);
     }
-    
+
+    private bool IsInTopColliders(Vector3 newPosition)
+    {
+      foreach (var topBound in topBounds)
+      {
+        if (topBound.bounds.Contains(newPosition))
+        {
+          return true;
+        }
+      }
+
+      return false;
+    }
+
     private (Vector3, bool) GetRandomTeleportDirection()
     {
-      bool shouldRevertTeleportDirection = Random.Range(0f, 1f) < teleportDirectionShiftProbability;
+      bool shouldRevertTeleportXDirection = Random.Range(0f, 1f) < teleportDirectionShiftProbability;
+      bool shouldTeleportDownwards = Random.Range(0f, 1f) < teleportDownwardsDirectionProbability;
       var teleportDistanceX = Random.Range(minTeleportDistance, maxTeleportDistance);
       var teleportDistanceY = Random.Range(minTeleportDistance, maxTeleportDistance);
-      var horizontalDirection = (shouldRevertTeleportDirection ? -1 : 1) * horizontalInput * teleportDistanceX;
-      return (transform.position + new Vector3(horizontalDirection, teleportDistanceY, 0), shouldRevertTeleportDirection);
+      var horizontalDirection = (shouldRevertTeleportXDirection ? -1 : 1) * horizontalInput * teleportDistanceX;
+      var verticalDirection = (shouldTeleportDownwards ? -1 : 1) * teleportDistanceY;
+      return (transform.position + new Vector3(horizontalDirection, verticalDirection, 0), shouldRevertTeleportXDirection);
     }
 
     private void Explode(bool shouldRevertTeleportDirection)

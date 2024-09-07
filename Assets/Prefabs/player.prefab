@@ -80,7 +80,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -2053015409
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 207f8e669e4de3d4eb126d568d86c025, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -137,8 +137,11 @@ MonoBehaviour:
   maxTeleportDistance: 35
   teleportationProbability: 0.5
   teleportDirectionShiftProbability: 0.5
+  teleportDownwardsDirectionProbability: 0.2
   leftBounds: {fileID: 0}
   rightBounds: {fileID: 0}
+  bottomBounds: {fileID: 0}
+  topBounds: []
 --- !u!50 &8693566426268998710
 Rigidbody2D:
   serializedVersion: 4
