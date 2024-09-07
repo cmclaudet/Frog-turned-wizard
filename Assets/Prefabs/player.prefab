@@ -130,6 +130,10 @@ MonoBehaviour:
   walkSpeed: 30
   minJumpForce: 500
   maxJumpForce: 500
+  minTeleportDistance: 2
+  maxTeleportDistance: 4
+  teleportDelaySec: 0
+  teleportationProbability: 0.5
 --- !u!50 &8693566426268998710
 Rigidbody2D:
   serializedVersion: 4
