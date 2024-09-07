@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 
 namespace Exit {
@@ -12,10 +11,10 @@ namespace Exit {
     [SerializeField] private float minTeleportDistance;
     [SerializeField] private float maxTeleportDistance;
     
-    [SerializeField] private float teleportDelaySec = 1;
-    
     [Range(0, 1)]
     [SerializeField] private float teleportationProbability;
+    [Range(0, 1)]
+    [SerializeField] private float teleportDirectionShiftProbability;
     
     private float horizontalInput;
     private float horizontalMovement;
@@ -90,17 +89,18 @@ namespace Exit {
       CharacterController.Move(horizontalMovement * Time.fixedDeltaTime, false, currentJumpState == JumpState.Normal, nextJumpForce);
       if (currentJumpState == JumpState.Teleport)
       {
-        StartCoroutine(StartTeleport());
+        Teleport();
       }
     }
     
-    private IEnumerator StartTeleport()
+    private void Teleport()
     {
       CharacterController.IsGrounded = false;
-      yield return new WaitForSeconds(teleportDelaySec);
-
-      var teleportDistance = Random.Range(minTeleportDistance, maxTeleportDistance);
-      transform.position += new Vector3(horizontalInput * teleportDistance, teleportDistance, 0);
+      var teleportDistanceX = Random.Range(minTeleportDistance, maxTeleportDistance);
+      var teleportDistanceY = Random.Range(minTeleportDistance, maxTeleportDistance);
+      var shouldRevertTeleportDirection = Random.Range(0f, 1f) < teleportDirectionShiftProbability;
+      var horizontalDirection = (shouldRevertTeleportDirection ? -1 : 1) * horizontalInput * teleportDistanceX;
+      transform.position += new Vector3(horizontalDirection, teleportDistanceY, 0);
       currentJumpState = JumpState.Normal;
     }
   }

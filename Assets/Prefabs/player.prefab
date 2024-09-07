@@ -132,8 +132,8 @@ MonoBehaviour:
   maxJumpForce: 2000
   minTeleportDistance: 10
   maxTeleportDistance: 30
-  teleportDelaySec: 0
   teleportationProbability: 0.5
+  teleportDirectionShiftProbability: 0.5
 --- !u!50 &8693566426268998710
 Rigidbody2D:
   serializedVersion: 4
