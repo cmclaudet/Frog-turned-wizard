@@ -1,4 +1,4 @@
-using Exit;
+using Reginald;
 using UnityEngine;
 
 public class TriggerWin : MonoBehaviour

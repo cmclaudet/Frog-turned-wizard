@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 using Vector3 = UnityEngine.Vector3;
 
-namespace Exit {
+namespace Reginald {
   public class Player : MonoBehaviour {
     [SerializeField] private GameplayCharacterController CharacterController;
     [SerializeField] private Animator animator;
@@ -26,6 +26,8 @@ namespace Exit {
     [SerializeField] private float teleportDirectionShiftProbability;
     [Range(0, 1)]
     [SerializeField] private float teleportDownwardsDirectionProbability;
+    
+    [SerializeField] private int maxConsecutiveTeleports = 3;
 
     [SerializeField] private GameObject leftBounds;
     [SerializeField] private GameObject rightBounds;
@@ -37,6 +39,7 @@ namespace Exit {
     private bool isWalking;
     private float nextJumpForce;
     private float lastYPosition;
+    private int consecutiveTeleports;
     
     private Input input;
     private JumpState currentJumpState;
@@ -73,22 +76,29 @@ namespace Exit {
       {
         return;
       }
-      var willTeleport = Random.Range(0f, 1f) < teleportationProbability;
+      var willTeleport = Random.Range(0f, 1f) < teleportationProbability && consecutiveTeleports < maxConsecutiveTeleports;
       currentJumpState = willTeleport ? JumpState.PendingTeleport : JumpState.Normal;
       if (currentJumpState == JumpState.Normal)
       {
-        audioSource.clip = bounceSound;
-        audioSource.Play();
-        nextJumpForce = Random.Range(minJumpForce, maxJumpForce);
+        SetUpJump();
       } 
       else
       {
         nextJumpForce = 0;
         if (currentJumpState == JumpState.PendingTeleport)
         {
+          consecutiveTeleports++;
           input.isPendingTeleport = true;
         }
       }
+    }
+    
+    private void SetUpJump()
+    {
+      consecutiveTeleports = 0;
+      audioSource.clip = bounceSound;
+      audioSource.Play();
+      nextJumpForce = Random.Range(minJumpForce, maxJumpForce);
     }
 
     public void TryTeleport()
@@ -138,6 +148,7 @@ namespace Exit {
       audioSource.clip = teleportSound;
       audioSource.Play();
       CharacterController.IsGrounded = false;
+      var attempts = 0;
       
       (Vector3 newPosition, bool shouldRevertTeleportDirection) = GetRandomTeleportDirection();
       
@@ -146,7 +157,20 @@ namespace Exit {
              newPosition.y < bottomBounds.transform.position.y ||
              IsInTopColliders(newPosition))
       {
-        (newPosition, shouldRevertTeleportDirection) = GetRandomTeleportDirection();
+        attempts++;
+        if (attempts > 200)
+        {
+          currentJumpState = JumpState.Normal;
+          return;
+        }
+        if (attempts > 50)
+        {
+          (newPosition, shouldRevertTeleportDirection) = GetRandomTeleportDirection(0.1f, 10);
+        }
+        else
+        {
+          (newPosition, shouldRevertTeleportDirection) = GetRandomTeleportDirection();
+        }
       }
       
       Explode(shouldRevertTeleportDirection);
@@ -168,12 +192,14 @@ namespace Exit {
       return false;
     }
 
-    private (Vector3, bool) GetRandomTeleportDirection()
+    private (Vector3, bool) GetRandomTeleportDirection(float minTeleportDistanceOverride = 0, float maxTeleportDistanceOverride = 0)
     {
+      var minDistance = minTeleportDistanceOverride == 0 ? this.minTeleportDistance : minTeleportDistanceOverride;
+      var maxDistance = maxTeleportDistanceOverride == 0 ? this.maxTeleportDistance : maxTeleportDistanceOverride;
       bool shouldRevertTeleportXDirection = Random.Range(0f, 1f) < teleportDirectionShiftProbability;
       bool shouldTeleportDownwards = Random.Range(0f, 1f) < teleportDownwardsDirectionProbability;
-      var teleportDistanceX = Random.Range(minTeleportDistance, maxTeleportDistance);
-      var teleportDistanceY = Random.Range(minTeleportDistance, maxTeleportDistance);
+      var teleportDistanceX = Random.Range(minDistance, maxDistance);
+      var teleportDistanceY = Random.Range(minDistance, maxDistance);
       var horizontalDirection = (shouldRevertTeleportXDirection ? -1 : 1) * horizontalInput * teleportDistanceX;
       var verticalDirection = (shouldTeleportDownwards ? -1 : 1) * teleportDistanceY;
       return (transform.position + new Vector3(horizontalDirection, verticalDirection, 0), shouldRevertTeleportXDirection);
@@ -191,6 +217,11 @@ namespace Exit {
       {
         explosionObj.GetComponent<Animator>().Play("Explode");
       }
+    }
+
+    public void EnableInput()
+    {
+      input.ToggleCanMove(true);
     }
   }
 }

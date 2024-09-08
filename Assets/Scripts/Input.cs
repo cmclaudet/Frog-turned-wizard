@@ -1,4 +1,4 @@
-namespace Exit {
+namespace Reginald {
     public class Input {
         private bool canMove = true;
         private readonly Player player;
