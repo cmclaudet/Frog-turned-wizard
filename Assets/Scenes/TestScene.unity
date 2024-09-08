@@ -1344,9 +1344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2668419199598332554, guid: 5f9b2fe8de8c54b2ab8f3c5f880cdade, type: 3}
       propertyPath: m_text
-      value: 'Once upond a time...
-
-        A frog became a wizard'
+      value: A frog became a wizard
       objectReference: {fileID: 0}
     - target: {fileID: 2668419199598332554, guid: 5f9b2fe8de8c54b2ab8f3c5f880cdade, type: 3}
       propertyPath: m_fontColor32.rgba
